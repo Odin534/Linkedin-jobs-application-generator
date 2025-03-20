@@ -1,0 +1,1 @@
+A python application that finds linkedin jobs based on location and key words and generates a cover letter and CV with help of LLM openAI API and saves it on local system. Also creates a database of the jobs. 
