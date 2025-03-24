@@ -22,7 +22,7 @@ class WebScrapper:
 
     def create_job_description_url(self,job_id):
         desc_url = f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}"
-        print(desc_url)
+        # print(desc_url)
         return desc_url
 
     def get_job_decription(self,job_id):
@@ -41,24 +41,21 @@ class WebScrapper:
         processed_ids = set()  # Track already processed job IDs
 
         while page_num <= page_limit:
-            print(f"Inside while loop for page number: {page_num}")
+            # print(f"Inside while loop for page number: {page_num}")
             job_search_url = self.create_job_search_url(job_title, location, page_num)
-            print(job_search_url)
+            # print(job_search_url)
             jobs_list = requests.get(job_search_url)
-            print(f"Before if condition, status code = {jobs_list.status_code}")
+            # print(f"Before if condition, status code = {jobs_list.status_code}")
             if jobs_list is not None:
-                print(f"Inside if condition, status code = job_list is not None")
+                # print(f"Inside if condition, status code = job_list is not None")
                 job_list_soup = BeautifulSoup(jobs_list.text, "html.parser")
                 page_jobs = job_list_soup.find_all("li")
-
-                # Handle page 0: Add all jobs
                 if page_num == 0:
                     for job in page_jobs:
                         self.process_and_insert_job(job, db_handler, processed_ids)
-                # Handle subsequent pages: Add only the last job
                 else:
                     if page_jobs:
-                        job = page_jobs[-1]  # Get the last job post
+                        job = page_jobs[-1] 
                         self.process_and_insert_job(job, db_handler, processed_ids)
             else:
                 print(f"Reached end of available jobs at page {page_num}")
@@ -111,12 +108,3 @@ class WebScrapper:
                 print(f"Error inserting job: {e}")
         else:
             print(f"Job with ID {jobs['id']} already processed. Skipping.")
-
-
-if __name__== '__main__':
-    # input section
-    job_title = input("Enter job title: ")
-    location = input("Enter location: ")
-    page_limit = int(input("Enter page limit: "))
-    WebScrapper = WebScrapper(job_title, location, page_limit)
-    WebScrapper.createDatabase(job_title, location, page_limit)

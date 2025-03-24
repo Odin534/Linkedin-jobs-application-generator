@@ -80,6 +80,13 @@ class JobsDBHandler:
         else:
             print(f"Job with ID {job_data['id']} already exists in the database.")
 
+    def fetch_all_jobs(self):
+        fetch_query = f"""
+        SELECT * FROM {self.table_name}
+        """
+        self.cur.execute(fetch_query)
+        return self.cur.fetchall(), [desc[0] for desc in self.cur.description]
+
 
     def close_connection(self):
         self.cur.close()
