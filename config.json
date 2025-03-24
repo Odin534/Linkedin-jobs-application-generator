@@ -1,0 +1,9 @@
+{
+    "database": {
+      "name": "jobs_db",
+      "user": "odin",
+      "password": "a2b3c4d5",
+      "host": "localhost",
+      "port": 5432
+    }
+  }
