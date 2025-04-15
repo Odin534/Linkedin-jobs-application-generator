@@ -1,6 +1,6 @@
 from webscrapper import WebScrapper
 import tkinter as tk
-from job_view import jobViewPage
+from job_view import JobViewerApp
 
 if __name__== '__main__':
     # input section
@@ -10,5 +10,5 @@ if __name__== '__main__':
     WebScrapper = WebScrapper(job_title, location, page_limit)
     WebScrapper.createDatabase(job_title, location, page_limit)
     root = tk.Tk()
-    app = jobViewPage(root, job_title)
+    app = JobViewerApp(root, job_title)
     root.mainloop()
