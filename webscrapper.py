@@ -4,12 +4,14 @@ import random
 import pandas as pd
 from jobs_db_handler import JobsDBHandler
 import time 
+from llm_handler import llm_agent
 
 class WebScrapper:
     def __init__(self, job_title:str, location:str, page_limit:int):    
         self.job_title = job_title
         self.location = location
         self.page_limit = page_limit
+        self.llm_agent = llm_agent()
 
 
 
@@ -99,7 +101,11 @@ class WebScrapper:
         if jobs["id"] not in processed_ids:
             processed_ids.add(jobs["id"])  # Mark the job ID as processed
             if jobs["id"].isdigit():
-                jobs["job_description"] = self.get_job_decription(int(jobs["id"]))
+                job_description = self.get_job_decription(int(jobs["id"]))
+                if job_description:
+                    jobs["key_tasks"] = self.llm_agent.refine_job_description(job_description_text=job_description)["key_tasks"]
+                    jobs["key_requirements"] = self.llm_agent.refine_job_description(job_description_text=job_description)["requirements"]
+
                 time.sleep(1)
             try:
                 db_handler.insert_row(jobs)

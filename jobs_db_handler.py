@@ -43,7 +43,8 @@ class JobsDBHandler:
             date_posted_exact TEXT,
             date_posted_relative TEXT,
             id BIGINT PRIMARY KEY,
-            job_description TEXT
+            key_tasks TEXT,
+            key_requirements TEXT
             
         );
         """
