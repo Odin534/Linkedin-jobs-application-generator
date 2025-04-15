@@ -101,11 +101,7 @@ class WebScrapper:
         if jobs["id"] not in processed_ids:
             processed_ids.add(jobs["id"])  # Mark the job ID as processed
             if jobs["id"].isdigit():
-                job_description = self.get_job_decription(int(jobs["id"]))
-                if job_description:
-                    jobs["key_tasks"] = self.llm_agent.refine_job_description(job_description_text=job_description)["key_tasks"]
-                    jobs["key_requirements"] = self.llm_agent.refine_job_description(job_description_text=job_description)["requirements"]
-
+                jobs["job_description"] = self.get_job_decription(int(jobs["id"]))
                 time.sleep(1)
             try:
                 db_handler.insert_row(jobs)

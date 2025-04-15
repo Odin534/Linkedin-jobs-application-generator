@@ -1,14 +1,15 @@
 from openai import OpenAI
 import requests
 import json
+from groq import Groq
 
 
 class llm_agent:
     def __init__(self):
         # self.api_key = self.load_config()
         # self.model = self.openAI_model(self.api_key)
-        self.client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
+        self.client = Groq(
+            # base_url="https://openrouter.ai/api/v1",
             api_key=self.get_api_key()
         )
 
@@ -16,7 +17,7 @@ class llm_agent:
     def get_api_key(self):
         with open("config.json", "r") as f:
             config = json.load(f)
-        return config["maverik_key"]
+        return config["groq_key"]
     
     # def openAI_model(self,api_key):
     #     model = OpenAI(api_key=api_key)
@@ -35,36 +36,17 @@ class llm_agent:
             "requirements": ["Requirement 1", "Requirement 2", "Requirement 3"]
         }}
         """
+        print(prompt)
         try:
-            response = requests.post(
-                url = "https://openrouter.ai/api/v1/chat/completions",
-                headers= {
-                    "Authorization": f"Bearer {self.get_api_key()}",
-                    "Content-type": "application/json"
-                },
-                data = json.dumps({
-                    "model" : "meta-llama/llama-4-maverick:free",
-                    "messages" : [
-                    {
-                        "role":"user",
-                        "content": [
-                            {
-                                "type":"text",
-                                "text": prompt
-                            }
-                        ]
-                    }
-                ]
-                })
-            )
-
-
-
-
-
-            # response = self.client.chat.completions.create(
-            #     model = "meta-llama/llama-4-maverick:free",
-            #     messages= [
+            # response = requests.post(
+            #     url = "https://openrouter.ai/api/v1/chat/completions",
+            #     headers= {
+            #         "Authorization": f"Bearer {self.get_api_key()}",
+            #         "Content-type": "application/json"
+            #     },
+            #     data = json.dumps({
+            #         "model" : "meta-llama/llama-4-maverick:free",
+            #         "messages" : [
             #         {
             #             "role":"user",
             #             "content": [
@@ -75,7 +57,24 @@ class llm_agent:
             #             ]
             #         }
             #     ]
+            #     })
             # )
+
+
+
+
+
+            response = self.client.chat.completions.create(
+                model = "llama3-70b-8192",
+                messages= [
+                    {
+                        "role":"user",
+                        "content": prompt
+                    }
+                ],
+                temperature=1,
+                max_tokens=8192
+            )
             refined_description = response.choices[0].message.content
             return eval(refined_description)
         except Exception as e:

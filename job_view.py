@@ -56,7 +56,7 @@ class JobViewerApp:
         self.tree = ttk.Treeview(root)
         self.tree.pack(fill="both", expand=True)
 
-        self.select_button = ttk.Button(root, text="Modify CV & Cover Letter", command=self.modify_documents)
+        self.select_button = ttk.Button(root, text="Show details", command=self.modify_documents)
         self.select_button.pack(pady=10)
 
         self.load_jobs()
@@ -74,7 +74,7 @@ class JobViewerApp:
         for row in rows:
             self.tree.insert("", "end", values=row)
 
-    def modify_documents(self):
+    def show_details(self):
         selected = self.tree.selection()
         if not selected:
             messagebox.showwarning("No Selection", "Please select a job row.")
